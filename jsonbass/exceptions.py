@@ -1,2 +1,2 @@
-class InvalidQueryMethodException(Exception):
+class NoSuchColumnException(Exception):
     pass

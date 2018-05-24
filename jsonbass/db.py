@@ -2,6 +2,7 @@ import json
 import os
 from jsonbass.config import config
 from jsonbass.random_utils import get_random_string
+from jsonbass.exceptions import NoSuchColumnException
 
 
 class DB(object):
@@ -34,10 +35,15 @@ class DB(object):
         data = DB.get_database()
         modified = False
 
-        entities = [
-            document_update(x) if document_update else x
-            for x in filter(document_filter, data[column])
-        ]
+        try:
+            entities = [
+                document_update(x) if document_update else x
+                for x in filter(document_filter, data[column])
+            ]
+        except KeyError:
+            raise NoSuchColumnException('{} is not an existing column'.format(
+                str(column)
+            ))
 
         if delete:
             for i, entity in enumerate(data[column]):
@@ -52,7 +58,7 @@ class DB(object):
         if modified:
             DB.write(data)
 
-        return entities
+        return entities[0] if (entities and first) else entities
 
     @staticmethod
     def insert_document(column, doc):
