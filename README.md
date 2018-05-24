@@ -10,7 +10,7 @@
 
     user = DB.insert_document('users', {
         'firstname': 'john',
-        'lastname': 'bad_password'    
+        'lastname': 'doe'
     })
 
 ## How does one update documents?
