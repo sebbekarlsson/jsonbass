@@ -1,0 +1,2 @@
+class InvalidQueryMethodException(Exception):
+    pass
