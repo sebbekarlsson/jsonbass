@@ -13,6 +13,8 @@
         'lastname': 'doe'
     })
 
+> The document will automatically get an `id` assigned to it.
+
 ## How does one update documents?
 
     def update(doc):
@@ -31,3 +33,15 @@
         delete,  # if set to true, found documents will be deleted
         first  # if set to true, you will only get the first document found
     )
+
+## How is the data stored?
+> All data is stored in plain json.  
+> Let us say that you have 2 database models: `users`, `messages`  
+> then the data would be stored like this:
+
+    {
+        "users": [...],
+        "messages": [...],
+    }
+
+> Every model will get their own `list` column in the JSON document.
