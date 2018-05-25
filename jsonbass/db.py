@@ -25,6 +25,14 @@ class DB(object):
         _file.close()
 
     @staticmethod
+    def _delete_documents(data, column, documents):
+        for i, entity in enumerate(data[column]):
+            if entity in documents:
+                del data[column][i]
+
+        return data
+
+    @staticmethod
     def iterate_documents(
         column,
         document_filter=None,
@@ -34,8 +42,8 @@ class DB(object):
     ):
         data = DB.get_database()
 
-        if delete and not document_filter:
-            data[column] = []
+        data[column] = [] if delete and not document_filter\
+            else data[column]
 
         try:
             entities = [
@@ -47,16 +55,13 @@ class DB(object):
                 str(column)
             ))
 
-        if delete and document_filter:
-            for i, entity in enumerate(data[column]):
-                if entity in entities:
-                    del data[column][i]
+        data = DB._delete_documents(data, column, entities)\
+            if delete and document_filter else data
 
-        elif document_update:
-            data[column] = entities
+        data[column] = entities if document_update and not delete\
+            else data[column]
 
-        if delete or document_update:
-            DB.write(data)
+        DB.write(data) if delete or document_update else None
 
         return entities[0] if (entities and first) else entities
 
@@ -64,11 +69,9 @@ class DB(object):
     def insert_document(column, doc):
         data = DB.get_database()
 
-        if column not in data:
-            data[column] = []
+        data[column] = [] if column not in data else data[column]
 
-        if 'id' not in doc:
-            doc['id'] = get_random_string(24)
+        doc['id'] = get_random_string(24) if 'id' not in doc else doc['id']
 
         if not DB.iterate_documents(
                 column, lambda x: x['id'] == doc['id'], first=True):
