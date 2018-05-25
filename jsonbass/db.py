@@ -35,6 +35,10 @@ class DB(object):
         data = DB.get_database()
         modified = False
 
+        if column not in data or (delete and not document_filter):
+            data[column] = []
+            modified = True
+
         try:
             entities = [
                 document_update(x) if document_update else x
@@ -45,13 +49,13 @@ class DB(object):
                 str(column)
             ))
 
-        if delete:
+        if delete and document_filter:
             for i, entity in enumerate(data[column]):
                 if entity in entities:
                     del data[column][i]
                     modified = True
 
-        if document_update:
+        elif document_update:
             data[column] = entities
             modified = True
 
@@ -81,18 +85,3 @@ class DB(object):
         DB.write(data)
 
         return doc
-
-    @staticmethod
-    def delete_all_documents(column=None):
-        data = DB.get_database()
-
-        if column:
-            data[column] = []
-        else:
-            data = {}
-
-        with open(config['db_file'], 'w+') as _file:
-            _file.write(json.dumps(data))
-        _file.close()
-
-        return data

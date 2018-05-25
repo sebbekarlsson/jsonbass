@@ -4,7 +4,7 @@ from jsonbass.db import DB
 def test_write_documents():
     column = 'notes'
 
-    DB.delete_all_documents(column)
+    DB.iterate_documents(column, delete=True)
 
     notes = [
         {
