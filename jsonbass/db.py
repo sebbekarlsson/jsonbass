@@ -33,11 +33,9 @@ class DB(object):
         first=False
     ):
         data = DB.get_database()
-        modified = False
 
-        if column not in data or (delete and not document_filter):
+        if delete and not document_filter:
             data[column] = []
-            modified = True
 
         try:
             entities = [
@@ -53,13 +51,11 @@ class DB(object):
             for i, entity in enumerate(data[column]):
                 if entity in entities:
                     del data[column][i]
-                    modified = True
 
         elif document_update:
             data[column] = entities
-            modified = True
 
-        if modified:
+        if delete or document_update:
             DB.write(data)
 
         return entities[0] if (entities and first) else entities
