@@ -26,11 +26,11 @@ class DB(object):
 
     @staticmethod
     def iterate_documents(
-            column,
-            document_filter=None,
-            document_update=None,
-            delete=False,
-            first=False
+        column,
+        document_filter=None,
+        document_update=None,
+        delete=False,
+        first=False
     ):
         data = DB.get_database()
         modified = False
