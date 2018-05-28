@@ -77,7 +77,7 @@ class DB(object):
                 column, lambda x: x['id'] == doc['id'], first=True):
             data[column].append(doc)
         else:
-            raise Exception('Document with id: {} already exists'.format(
+            raise KeyError('Document with id: {} already exists'.format(
                 doc['id']
             ))
 
